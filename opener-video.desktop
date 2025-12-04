@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Video)
+Comment=Open video files with application selection
+Exec=/path/to/openwith.rs --video/mp4 -- %f
+Terminal=false
+NoDisplay=true
+MimeType=video/mp4;video/webm;video/ogg;video/avi;video/mkv;video/x-matroska;

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Audio)
+Comment=Open audio files with application selection
+Exec=/path/to/openwith.rs --audio/mpeg -- %f
+Terminal=false
+NoDisplay=true
+MimeType=audio/mpeg;audio/ogg;audio/wav;audio/flac;audio/mp3;audio/aac;

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Images)
+Comment=Open image files with application selection
+Exec=/path/to/openwith.rs --image/png -- %f
+Terminal=false
+NoDisplay=true
+MimeType=image/png;image/jpeg;image/jpg;image/gif;image/svg+xml;image/webp;image/bmp;

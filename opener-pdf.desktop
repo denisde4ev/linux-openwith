@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (PDF)
+Comment=Open PDF files with application selection
+Exec=/path/to/openwith.rs --application/pdf -- %f
+Terminal=false
+NoDisplay=true
+MimeType=application/pdf;

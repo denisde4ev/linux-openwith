@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (HTML)
+Comment=Open HTML files with application selection
+Exec=/path/to/openwith.rs --text/html -- %f
+Terminal=false
+NoDisplay=true
+MimeType=text/html;
