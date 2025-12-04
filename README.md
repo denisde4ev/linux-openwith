@@ -35,14 +35,14 @@ A Rust program that detects and launches applications for specific protocols or 
 
 The project includes `.desktop` files for common protocols and MIME types:
 
-- `opener-http.desktop` - HTTP URLs
-- `opener-https.desktop` - HTTPS URLs
-- `opener-text.desktop` - Plain text files
-- `opener-html.desktop` - HTML files
-- `opener-pdf.desktop` - PDF files
-- `opener-image.desktop` - Image files (PNG, JPEG, GIF, SVG, WebP, BMP)
-- `opener-video.desktop` - Video files (MP4, WebM, OGG, AVI, MKV)
-- `opener-audio.desktop` - Audio files (MP3, OGG, WAV, FLAC, AAC)
+- `openwith-http.desktop` - HTTP URLs
+- `openwith-https.desktop` - HTTPS URLs
+- `openwith-text.desktop` - Plain text files
+- `openwith-html.desktop` - HTML files
+- `openwith-pdf.desktop` - PDF files
+- `openwith-image.desktop` - Image files (PNG, JPEG, GIF, SVG, WebP, BMP)
+- `openwith-video.desktop` - Video files (MP4, WebM, OGG, AVI, MKV)
+- `openwith-audio.desktop` - Audio files (MP3, OGG, WAV, FLAC, AAC)
 
 ### Installation
 
@@ -54,12 +54,12 @@ The project includes `.desktop` files for common protocols and MIME types:
 2. Update the `Exec` paths in all `.desktop` files to point to the absolute path of `openwith.rs`:
    ```bash
    # Replace /path/to/ with the actual path
-   sed -i 's|/path/to/openwith.rs|/full/path/to/openwith.rs|g' opener-*.desktop
+   sed -i 's|/path/to/openwith.rs|/full/path/to/openwith.rs|g' openwith-*.desktop
    ```
 
 3. Copy the `.desktop` files to your local applications directory:
    ```bash
-   cp opener-*.desktop ~/.local/share/applications/
+   cp openwith-*.desktop ~/.local/share/applications/
    ```
 
 4. Update the desktop database:
@@ -67,11 +67,11 @@ The project includes `.desktop` files for common protocols and MIME types:
    update-desktop-database ~/.local/share/applications/
    ```
 
-5. Set the opener as the default handler for specific types (optional):
+5. Set the openwith as the default handler for specific types (optional):
    ```bash
-   xdg-mime default opener-http.desktop x-scheme-handler/http
-   xdg-mime default opener-https.desktop x-scheme-handler/https
-   xdg-mime default opener-text.desktop text/plain
+   xdg-mime default openwith-http.desktop x-scheme-handler/http
+   xdg-mime default openwith-https.desktop x-scheme-handler/https
+   xdg-mime default openwith-text.desktop text/plain
    ```
 
 ## How It Works

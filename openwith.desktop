@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=Opener (Any)
-Comment=Universal file and protocol opener with application selection
+Comment=OpenWith program for any type of file or URL
 Exec=/path/to/openwith.rs %u
 Terminal=false
 NoDisplay=true

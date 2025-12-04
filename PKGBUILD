@@ -13,11 +13,20 @@ source=()
 md5sums=()
 
 build() {
-	cd "$startdir"
+	cd "$srcdir"
 	
 	# Remove the shebang 'rust-script' line and compile with rustc
-	tail -n +2 openwith.rs > "$srcdir"/opener.rs
-	rustc -O "$srcdir"/opener.rs -o "$srcdir"/openwith
+	tail -n +2 "$startdir"/openwith.rs > openwith.rs
+	rustc -O openwith.rs -o openwith
+	
+	# Process desktop files using the install script to srcdir
+	mkdir -p applications
+	"$startdir"/install-desktop-file.sh \
+		-e /usr/bin/openwith \
+		-- \
+		"$startdir"/openwith-*.desktop \
+		applications/ \
+	;
 }
 
 package() {
@@ -26,19 +35,13 @@ package() {
 	# Install the compiled binary
 	install -Dm755 "$srcdir"/openwith "$pkgdir/usr/bin/openwith"
 
-
-	# Use the install script with -e option to specify the binary path
+	# Install the processed desktop files
 	mkdir -p "$pkgdir/usr/share/applications"
-	./install-desktop-file.sh \
-		-e /usr/bin/openwith \
-		-- \
-		./opener-*.desktop \
-		"$pkgdir/usr/share/applications/" \
-	;
+	install -m644 "$srcdir"/applications/*.desktop "$pkgdir/usr/share/applications/"
 	
 	# Install README if it exists
-	if [ -f README.md ]; then
-		install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+	if [ -f "$startdir/README.md" ]; then
+		install -Dm644 "$startdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
 	fi
 }
 

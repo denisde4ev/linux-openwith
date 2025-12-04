@@ -9,7 +9,7 @@ use std::process::Command;
 use std::io::{self, BufRead};
 
 fn main() {
-	let program_name = env::args().next().unwrap_or_else(|| "opener".to_string());
+	let program_name = env::args().next().unwrap_or_else(|| "openwith".to_string());
 	
 	// Check for --help flag
 	if env::args().nth(1).as_deref() == Some("--help") {
