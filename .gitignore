@@ -1,0 +1,11 @@
+# makepkg output files
+pkg/
+src/
+*.pkg.tar.zst
+*.pkg.tar.xz
+*.pkg.tar.gz
+
+
+# Backup files
+*~
+*.bak
