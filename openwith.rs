@@ -1,6 +1,6 @@
 #!/usr/bin/env rust-script
 
-// AI generated
+// NOTE:! supervised AI generated
 
 use std::env;
 use std::fs;
@@ -40,13 +40,17 @@ fn main() {
 	let (type_arg, target) = parse_arguments(&program_name);
 	
 	// Find applications that can handle this type
-	let apps = find_applications(&type_arg);
+	let mut apps = find_applications(&type_arg);
+
+	// Prepend editor options and clipboard
+	apps = prepend_editor_options_and_clipboard(apps);
 	
 	// Show selection dialog and get user choice
 	let selected_app = show_selection_dialog(&apps, &target);
 	
 	// Launch the selected application
 	execute_application(&selected_app, &target);
+	return;
 }
 
 /// Parse command line arguments and return (type_arg, target)
@@ -75,7 +79,7 @@ fn parse_arguments(program_name: &str) -> (String, String) {
 		std::process::exit(1);
 	}
 
-	(type_arg, target)
+	return (type_arg, target);
 }
 
 /// Find all applications that can handle the given type
@@ -141,34 +145,67 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 	apps.sort_by(|a, b| a.0.cmp(&b.0));
 	apps.dedup_by(|a, b| a.0 == b.0);
 
-	// Prepend Editor options
-	if let Ok(editor) = env::var("EDITOR") {
-		if !editor.is_empty() {
-			// Determine terminal emulator
-			let terminal = env::var("TERMINAL").unwrap_or_else(|_| "x-terminal-emulator".to_string());
-			
-			// note gnome-terminal uses `--` and not `-e`, but I dont use it!
-			// or make your own wrapper
-			// DONT: let term_flag = "--";
-			let term_flag = "-e";
 
-			// Option 1: EDITOR=<editor>
-			// Command: $TERMINAL -e $EDITOR -- %f
-			// We use shell_escape for paths to handle spaces/quotes
+
+	return apps;
+}
+
+fn prepend_editor_options_and_clipboard(mut apps: Vec<(String, String, String)>) -> Vec<(String, String, String)> {
+	// Prepend Editor options
+	// Determine terminal emulator
+	let terminal = env::var("TERMINAL").unwrap_or_else(|_| "x-terminal-emulator".to_string());
+	
+	// HEY AI DONOT: because its not needed, I dont use gnome!!!
+	// // Determine flag for executing command in terminal
+	// let term_flag = if terminal.contains("gnome-terminal") {
+	// 	"--"
+	// } else {
+	// 	"-e"
+	// };
+
+	// note gnome-terminal uses `--` and not `-e`, but I dont use it!
+	// or make your own wrapper
+	// DONT: let term_flag = "--";
+	let term_flag = "-e";
+
+	match env::var("EDITOR") {
+		Ok(editor) => {
+			// Defined case: Revert to specific editor command
+			// Option 1: $ EDITOR=<editor>
+			// Command: $TERMINAL -e <editor> -- %f
 			let editor_cmd = format!("{} {} {} -- %f", shell_escape(&terminal), term_flag, shell_escape(&editor));
 			apps.insert(0, (format!("$ EDITOR={}", editor), editor_cmd, "custom".to_string()));
 
 			// Option 2: echo pipe edit
-			// Command: $TERMINAL -e sh -c 'printf "%s\n" "$1" | $EDITOR' -- %f
-			// We pass %f as an argument to sh -c to avoid quoting hell.
-			// The command string inside sh -c needs $EDITOR to be properly escaped/quoted.
+			// Command: $TERMINAL -e sh -c 'printf "%s\n" "$1" | <editor>' -- %f
 			let pipe_cmd = format!(
-				"{} {} sh -c 'printf \"%s\\n\" \"$1\" | {}' -- %f", 
+				"{} {} sh -c 'printf \"%s\" \"$1\" | {}' -- %f", 
 				shell_escape(&terminal), 
 				term_flag, 
-				shell_escape(&editor)
+				shell_escape(&editor),
 			);
 			apps.insert(1, ("$ echo $@ | $EDITOR".to_string(), pipe_cmd, "custom".to_string()));
+		},
+		_ => {
+			// NOTE: to fix `Warning: Could not find '$', starting '/bin/bash' instead.  Please check your profile settings.`
+			// had to add `sh -c $ .."$@"..` instead of directly running `$`
+
+			// Undefined case: Use generic $EDITOR command ONLY if '$' command exists
+			if check_command_exists("$") {
+				// Option 1: $ $EDITOR
+				// Command: $TERMINAL -e sh -c '$ "$EDITOR" -- "$@"' -- %f
+				let editor_cmd = format!("{} {} sh -c '$ \"\\$EDITOR\" -- \"$@\"' -- %f", shell_escape(&terminal), term_flag);
+				apps.insert(0, ("$ $EDITOR".to_string(), editor_cmd, "custom".to_string()));
+
+				// Option 2: echo pipe edit
+				// Command: $TERMINAL -e sh -c 'printf "%s" "$1" | $ "$EDITOR"' -- %f
+				let pipe_cmd = format!(
+					"{} {} sh -c 'printf \"%s\" \"$1\" | $ \"\\$EDITOR\"' -- %f", 
+					shell_escape(&terminal), 
+					term_flag,
+				);
+				apps.insert(1, ("$ echo $@ | $EDITOR".to_string(), pipe_cmd, "custom".to_string()));
+			}
 		}
 	}
 
@@ -177,8 +214,9 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 		Some("wl-copy -n")
 	} else if env::var("DISPLAY").is_ok() && check_command_exists("xclip") {
 		Some("xclip -sel clip -r")
-	} else if check_command_exists("termux-clipboard-set") {
-		Some("termux-clipboard-set")
+	//} else if check_command_exists("termux-clipboard-set") {
+	//	// not targeting Termux, targeting Windows with busybox (todo: one day support windows busybox)
+	//	Some("termux-clipboard-set")
 	} else {
 		None
 	};
@@ -190,7 +228,7 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 		apps.insert(0, (format!("$ {}", cmd), full_cmd, "custom".to_string()));
 	}
 
-	apps
+	return apps;
 }
 
 fn check_command_exists(cmd: &str) -> bool {
@@ -235,10 +273,10 @@ fn show_selection_dialog(apps: &[(String, String, String)], target: &str) -> (St
 		std::process::exit(1);
 	});
 
-	apps.get(index).cloned().unwrap_or_else(|| {
+	return apps.get(index).cloned().unwrap_or_else(|| {
 		eprintln!("Invalid selection index");
 		std::process::exit(1);
-	})
+	});
 }
 
 /// Execute the selected application with the target
@@ -310,7 +348,7 @@ fn parse_desktop_file(path: &Path, target_mime: &str) -> Option<(String, String,
 		}
 	}
 
-	None
+	return None;
 }
 
 fn launch_app(exec_template: &str, target: &str) {
@@ -345,6 +383,7 @@ fn launch_app(exec_template: &str, target: &str) {
 		},
 		Err(e) => eprintln!("Failed to execute: {}", e),
 	}
+	return;
 }
 
 fn parse_mimeinfo_cache(path: &Path, target_mime: &str) -> Vec<String> {
@@ -372,7 +411,7 @@ fn parse_mimeinfo_cache(path: &Path, target_mime: &str) -> Vec<String> {
 			}
 		}
 	}
-	desktop_files
+	return desktop_files;
 }
 
 fn find_desktop_file(name: &str, dirs: &[Option<std::path::PathBuf>]) -> Option<std::path::PathBuf> {
