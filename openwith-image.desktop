@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Images)
+Name=OpenWith (Images)
 Comment=Open image files with application selection
 Exec=/path/to/openwith.rs --image/png -- %f
 Terminal=false

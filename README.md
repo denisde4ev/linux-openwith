@@ -1,6 +1,6 @@
 // AI generated
 
-# Rust Opener
+# Rust OpenWith
 
 A Rust program that detects and launches applications for specific protocols or file types on Linux systems using `kdialog` for user selection.
 

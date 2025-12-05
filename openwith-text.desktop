@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Text)
+Name=OpenWith (Text)
 Comment=Open text files with application selection
 Exec=/path/to/openwith.rs --text/plain -- %f
 Terminal=false

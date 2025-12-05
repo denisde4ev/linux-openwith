@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (HTTP)
+Name=OpenWith (HTTP)
 Comment=Open HTTP URLs with application selection
 Exec=/path/to/openwith.rs --https -- %u
 Terminal=false
