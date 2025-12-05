@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Code)
+Name=OpenWith (Code)
 Comment=Open code/data files with application selection
 Exec=/path/to/openwith.rs --text/plain -- %f
 Terminal=false

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Geo)
+Name=OpenWith (Geo)
 Comment=Open geo locations with application selection
 Exec=/path/to/openwith.rs --x-scheme-handler/geo -- %u
 Terminal=false

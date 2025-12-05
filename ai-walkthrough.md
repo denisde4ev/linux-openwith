@@ -1,6 +1,6 @@
-# Walkthrough - Rust Opener
+# Walkthrough - Rust OpenWith
 
-I have implemented a Rust-based opener program that detects and launches applications for various protocols and file types.
+I have implemented a Rust-based OpenWith program that detects and launches applications for various protocols and file types.
 
 ## Changes
 
@@ -14,7 +14,7 @@ I have implemented a Rust-based opener program that detects and launches applica
 - **Argument Parsing**: Accepts `--<type> -- <URI|file>` format
 - **MIME Type Detection**: Converts protocol names (e.g., `http`) to `x-scheme-handler/http`
 - **Desktop File Scanning**: Recursively scans standard Linux application directories
-- **Application Matching**: Parses [.desktop](file:///%5E/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener.desktop) files and matches against the target MIME type
+- **Application Matching**: Parses [.desktop](file:///%5E/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith.desktop) files and matches against the target MIME type
 - **User Interface**: Uses `kdialog --menu` to present application choices
 - **Process Execution**: Launches the selected application with proper handling of desktop file `Exec` field codes
 
@@ -26,16 +26,16 @@ I have implemented a Rust-based opener program that detects and launches applica
 
 ### Desktop Files
 
-Created separate [.desktop](file:///%5E/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener.desktop) files for each handler type:
+Created separate [.desktop](file:///%5E/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith.desktop) files for each handler type:
 
-1. **[opener-http.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-http.desktop)** - HTTP protocol handler
-2. **[opener-https.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-https.desktop)** - HTTPS protocol handler
-3. **[opener-text.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-text.desktop)** - Plain text files
-4. **[opener-html.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-html.desktop)** - HTML files
-5. **[opener-pdf.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-pdf.desktop)** - PDF files
-6. **[opener-image.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-image.desktop)** - Image files (PNG, JPEG, GIF, SVG, WebP, BMP)
-7. **[opener-video.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-video.desktop)** - Video files (MP4, WebM, OGG, AVI, MKV)
-8. **[opener-audio.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-audio.desktop)** - Audio files (MP3, OGG, WAV, FLAC, AAC)
+1. **[OpenWith-http.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-http.desktop)** - HTTP protocol handler
+2. **[OpenWith-https.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-https.desktop)** - HTTPS protocol handler
+3. **[OpenWith-text.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-text.desktop)** - Plain text files
+4. **[OpenWith-html.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-html.desktop)** - HTML files
+5. **[OpenWith-pdf.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-pdf.desktop)** - PDF files
+6. **[OpenWith-image.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-image.desktop)** - Image files (PNG, JPEG, GIF, SVG, WebP, BMP)
+7. **[OpenWith-video.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-video.desktop)** - Video files (MP4, WebM, OGG, AVI, MKV)
+8. **[OpenWith-audio.desktop](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-audio.desktop)** - Audio files (MP3, OGG, WAV, FLAC, AAC)
 
 Each desktop file:
 - Has `NoDisplay=true` to hide it from application menus
@@ -54,9 +54,9 @@ Comprehensive documentation including:
 
 ### Cleanup
 
-#### [opener-wrapper.sh](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/opener-wrapper.sh)
+#### [OpenWith-wrapper.sh](file:///^/%20https%253A/cdn.jsdelivr.net/gh/denisde4ev/test-vibe-repo-5/OpenWith-wrapper.sh)
 
-Replaced with `rm opener-wrapper.sh` command as requested by the user.
+Replaced with `rm OpenWith-wrapper.sh` command as requested by the user.
 
 ## Installation Steps
 
@@ -67,19 +67,19 @@ Replaced with `rm opener-wrapper.sh` command as requested by the user.
 
 2. **Update paths in desktop files:**
    ```bash
-   sed -i 's|/path/to/index.rs|/full/path/to/index.rs|g' opener-*.desktop
+   sed -i 's|/path/to/index.rs|/full/path/to/index.rs|g' OpenWith-*.desktop
    ```
 
 3. **Install desktop files:**
    ```bash
-   cp opener-*.desktop ~/.local/share/applications/
+   cp OpenWith-*.desktop ~/.local/share/applications/
    update-desktop-database ~/.local/share/applications/
    ```
 
 4. **Set as default (optional):**
    ```bash
-   xdg-mime default opener-http.desktop x-scheme-handler/http
-   xdg-mime default opener-https.desktop x-scheme-handler/https
+   xdg-mime default OpenWith-http.desktop x-scheme-handler/http
+   xdg-mime default OpenWith-https.desktop x-scheme-handler/https
    ```
 
 ## Usage Examples

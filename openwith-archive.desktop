@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Archive)
+Name=OpenWith (Archive)
 Comment=Open archives with application selection
 Exec=/path/to/openwith.rs --application/zip -- %f
 Terminal=false

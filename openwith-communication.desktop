@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Communication)
+Name=OpenWith (Communication)
 Comment=Open communication links with application selection
 Exec=/path/to/openwith.rs --x-scheme-handler/mailto -- %u
 Terminal=false

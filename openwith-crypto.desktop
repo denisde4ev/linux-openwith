@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Crypto)
+Name=OpenWith (Crypto)
 Comment=Open keys and certificates with application selection
 Exec=/path/to/openwith.rs --application/pkix-cert -- %f
 Terminal=false

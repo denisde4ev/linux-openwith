@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Torrent)
+Name=OpenWith (Torrent)
 Comment=Open torrents and magnets with application selection
 Exec=/path/to/openwith.rs --application/x-bittorrent -- %u
 Terminal=false

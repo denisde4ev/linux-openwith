@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Font)
+Name=OpenWith (Font)
 Comment=Open fonts with application selection
 Exec=/path/to/openwith.rs --font/ttf -- %f
 Terminal=false

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Package)
+Name=OpenWith (Package)
 Comment=Open packages and installers with application selection
 Exec=/path/to/openwith.rs --application/vnd.debian.binary-package -- %f
 Terminal=false

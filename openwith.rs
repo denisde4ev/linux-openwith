@@ -44,6 +44,11 @@ fn main() {
 
 	// Prepend editor options and clipboard
 	apps = prepend_editor_options_and_clipboard(apps);
+
+	if apps.is_empty() {
+		eprintln!("No applications found for {}", type_arg);
+		std::process::exit(1);
+	}
 	
 	// Show selection dialog and get user choice
 	let selected_app = show_selection_dialog(&apps, &target);
@@ -136,10 +141,7 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 		}
 	}
 
-	if apps.is_empty() {
-		eprintln!("No applications found for {}", mime_type);
-		std::process::exit(1);
-	}
+
 
 	// Sort and deduplicate
 	apps.sort_by(|a, b| a.0.cmp(&b.0));

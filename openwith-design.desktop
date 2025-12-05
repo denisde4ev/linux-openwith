@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Opener (Design)
+Name=OpenWith (Design)
 Comment=Open design and diagram files with application selection
 Exec=/path/to/openwith.rs --image/x-xcf -- %f
 Terminal=false
