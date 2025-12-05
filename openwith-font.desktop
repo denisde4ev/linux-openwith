@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Font)
+Comment=Open fonts with application selection
+Exec=/path/to/openwith.rs --font/ttf -- %f
+Terminal=false
+NoDisplay=true
+MimeType=font/ttf;font/otf;font/ttc;font/collection;application/x-font-ttf;application/x-font-otf;application/x-font-type1;application/x-font-pcf;application/x-font-bdf;application/vnd.kde.fontspackage;

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Communication)
+Comment=Open communication links with application selection
+Exec=/path/to/openwith.rs --x-scheme-handler/mailto -- %u
+Terminal=false
+NoDisplay=true
+MimeType=x-scheme-handler/mailto;x-scheme-handler/telnet;x-scheme-handler/ssh;x-scheme-handler/irc;x-scheme-handler/sip;x-scheme-handler/tel;

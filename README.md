@@ -43,6 +43,18 @@ The project includes `.desktop` files for common protocols and MIME types:
 - `openwith-image.desktop` - Image files (PNG, JPEG, GIF, SVG, WebP, BMP)
 - `openwith-video.desktop` - Video files (MP4, WebM, OGG, AVI, MKV)
 - `openwith-audio.desktop` - Audio files (MP3, OGG, WAV, FLAC, AAC)
+- `openwith-directory.desktop` - Directories
+- `openwith-archive.desktop` - Archives (ZIP, TAR, GZ, 7Z, etc.)
+- `openwith-code.desktop` - Code and Data files (XML, JSON, YAML, etc.)
+- `openwith-document.desktop` - Office documents (ODT, DOCX, XLSX, etc.)
+- `openwith-font.desktop` - Fonts (TTF, OTF, etc.)
+- `openwith-package.desktop` - Packages (DEB, RPM, AppImage, etc.)
+- `openwith-torrent.desktop` - Torrents and Magnet links
+- `openwith-geo.desktop` - Geo locations
+- `openwith-communication.desktop` - Communication links (Mailto, SSH, IRC, etc.)
+- `openwith-crypto.desktop` - Keys and Certificates
+- `openwith-ebook.desktop` - E-books and Comics (EPUB, CBZ, etc.)
+- `openwith-design.desktop` - Design files (Visio, Krita, etc.)
 
 ### Installation
 

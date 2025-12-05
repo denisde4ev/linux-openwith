@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Archive)
+Comment=Open archives with application selection
+Exec=/path/to/openwith.rs --application/zip -- %f
+Terminal=false
+NoDisplay=true
+MimeType=application/zip;application/x-tar;application/gzip;application/x-7z-compressed;application/x-rar;application/x-bzip2;application/x-xz;application/x-lzip;application/x-lzma;application/x-lzop;application/zstd;application/x-zstd;

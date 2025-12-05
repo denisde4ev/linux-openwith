@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Code)
+Comment=Open code/data files with application selection
+Exec=/path/to/openwith.rs --text/plain -- %f
+Terminal=false
+NoDisplay=true
+MimeType=text/xml;application/xml;application/json;application/x-yaml;text/x-yaml;text/x-python;application/x-shellscript;text/x-c;text/x-c++;text/x-java;text/javascript;application/javascript;text/css;text/x-markdown;

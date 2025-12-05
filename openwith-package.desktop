@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Package)
+Comment=Open packages and installers with application selection
+Exec=/path/to/openwith.rs --application/vnd.debian.binary-package -- %f
+Terminal=false
+NoDisplay=true
+MimeType=application/vnd.debian.binary-package;application/x-deb;application/x-rpm;application/x-source-rpm;application/x-appimage;application/vnd.appimage;application/x-iso9660-appimage;application/vnd.flatpak.repo;application/vnd.flatpak.ref;application/vnd.flatpak;application/vnd.snap;application/vnd.android.package-archive;application/x-ms-dos-executable;application/x-java-archive;

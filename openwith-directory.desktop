@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Directory)
+Comment=Open directories with application selection
+Exec=/path/to/openwith.rs --inode/directory -- %f
+Terminal=false
+NoDisplay=true
+MimeType=inode/directory;

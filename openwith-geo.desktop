@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Geo)
+Comment=Open geo locations with application selection
+Exec=/path/to/openwith.rs --x-scheme-handler/geo -- %u
+Terminal=false
+NoDisplay=true
+MimeType=x-scheme-handler/geo;

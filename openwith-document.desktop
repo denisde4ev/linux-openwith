@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Document)
+Comment=Open documents with application selection
+Exec=/path/to/openwith.rs --application/vnd.oasis.opendocument.text -- %f
+Terminal=false
+NoDisplay=true
+MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.presentation;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/msword;application/vnd.ms-excel;application/vnd.ms-powerpoint;application/rtf;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.image;text/rtf;application/vnd.wordperfect;application/vnd.sun.xml.writer;application/vnd.sun.xml.calc;application/vnd.sun.xml.impress;

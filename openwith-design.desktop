@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Opener (Design)
+Comment=Open design and diagram files with application selection
+Exec=/path/to/openwith.rs --image/x-xcf -- %f
+Terminal=false
+NoDisplay=true
+MimeType=application/vnd.visio;application/x-visio;application/visio;application/visio.drawing;application/vnd.ms-visio.viewer;application/vnd.ms-visio.template.main+xml;application/vnd.ms-visio.drawing.main+xml;image/x-xcf;application/x-krita;application/x-dia-diagram;
