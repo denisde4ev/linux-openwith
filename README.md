@@ -1,4 +1,15 @@
-// AI generated
+
+# Note:
+
+* I have integrated my command `/bin/$` that evaluates my .bashrc to get the value of `$EDITOR` when missing
+* `echo | $EDITOR` is known to work only for `micro` editor (I use it)
+* depends on `kdialog` (KDE). {todo: there was some wrapper that works for gnome's one and detects on what system you are, I'll use it in future}
+
+
+----
+
+
+from here on AI generated markdown:
 
 # Rust OpenWith
 
