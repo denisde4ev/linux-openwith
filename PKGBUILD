@@ -1,24 +1,28 @@
-# Maintainer: Your Name <your.email@example.com>
-pkgname=openwith-denisde4ev
+pkgname=openwith-denisde4ev-git
 pkgver=1.0.0
 pkgrel=1
-pkgdesc="A Rust program that detects and launches applications for protocols and file types using kdialog"
+pkgdesc="OpenWith dialog for files and URL/URI"
 arch=('x86_64')
 # never tested arch=('x86_64' 'aarch64')
-url="https://github.com/yourusername/openwith"
+url="https://github.com/denisde4ev/linux-openwith"
 license=('MIT')
 depends=('kdialog')
 makedepends=('rust')
 source=()
+# source=("https://github.com/denisde4ev/linux-openwith")
 md5sums=()
 
 build() {
 	cd "$srcdir"
-	
-	# # Remove the shebang 'rust-script' line and compile with rustc
-	# tail -n +2 "$startdir"/openwith.rs > openwith.rs
-	# rustc -O openwith.rs -o openwith
-	rustc -O "$startdir"/openwith.rs -o openwith
+
+	#rustc -O -C debuginfo=0 "$startdir"/opener.rs -o openwith
+	rustc \
+		-C opt-level=3 \
+		-C lto=fat \
+		-C codegen-units=1 \
+		-C panic=abort \
+		"$startdir"/openwith.rs -o openwith \
+	;
 	
 	# Process desktop files using the install script to srcdir
 	mkdir -p applications
