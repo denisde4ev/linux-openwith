@@ -10,14 +10,15 @@ use std::io::{self, BufRead};
 
 fn main() {
 	let program_name = env::args().next().unwrap_or_else(|| "openwith".to_string());
-	
+
 	// Check for --help flag
 	if env::args().nth(1).as_deref() == Some("--help") {
 		use std::io::Write;
 		let stdout = std::io::stdout();
 		let mut handle = stdout.lock();
-		
-		let result = writeln!(handle, "Usage: {} --<type> -- <URI|file>", program_name)
+
+		let result =
+			writeln!(handle, "Usage: {} --<type> -- <URI|file>", program_name)
 			.and_then(|_| writeln!(handle))
 			.and_then(|_| writeln!(handle, "Arguments:"))
 			.and_then(|_| writeln!(handle, "  --<type>     MIME type or protocol (e.g., http, https, text/plain)"))
@@ -27,18 +28,19 @@ fn main() {
 			.and_then(|_| writeln!(handle, "Examples:"))
 			.and_then(|_| writeln!(handle, "  {} --http -- https://google.com", program_name))
 			.and_then(|_| writeln!(handle, "  {} --text/plain -- document.txt", program_name))
-			.and_then(|_| writeln!(handle, "  {} --application/pdf -- document.pdf", program_name));
-		
+			.and_then(|_| writeln!(handle, "  {} --application/pdf -- document.pdf", program_name))
+		;
+
 		if result.is_ok() {
 			std::process::exit(0);
 		} else {
 			std::process::exit(1);
 		}
 	}
-	
+
 	// Parse command line arguments
 	let (type_arg, target) = parse_arguments(&program_name);
-	
+
 	// Find applications that can handle this type
 	let mut apps = find_applications(&type_arg);
 
@@ -49,10 +51,10 @@ fn main() {
 		eprintln!("No applications found for {}", type_arg);
 		std::process::exit(1);
 	}
-	
+
 	// Show selection dialog and get user choice
 	let selected_app = show_selection_dialog(&apps, &target);
-	
+
 	// Launch the selected application
 	execute_application(&selected_app, &target);
 	return;
@@ -102,7 +104,7 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 		Some(std::path::PathBuf::from("/usr/local/share/applications")),
 		Some(std::path::PathBuf::from("/usr/share/applications")),
 	];
-	
+
 	if let Ok(home) = env::var("HOME") {
 		dirs.insert(0, Some(std::path::PathBuf::from(home).join(".local/share/applications")));
 	}
@@ -133,7 +135,7 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 		if found_in_cache {
 			println!("Cache entries found but failed to load applications, falling back to full scan...");
 		}
-		
+
 		for dir in dirs.into_iter().flatten() {
 			if dir.exists() {
 				visit_dirs(&dir, &mime_type, &mut apps);
@@ -142,12 +144,11 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 	}
 
 
-
-	// Sort and deduplicate
-	apps.sort_by(|a, b| a.0.cmp(&b.0));
-	apps.dedup_by(|a, b| a.0 == b.0);
-
-
+	// if false {
+	// 	// Sort and deduplicate
+	// 	apps.sort_by(|a, b| a.0.cmp(&b.0));
+	// 	apps.dedup_by(|a, b| a.0 == b.0);
+	// }
 
 	return apps;
 }
@@ -156,7 +157,7 @@ fn prepend_editor_options_and_clipboard(mut apps: Vec<(String, String, String)>)
 	// Prepend Editor options
 	// Determine terminal emulator
 	let terminal = env::var("TERMINAL").unwrap_or_else(|_| "x-terminal-emulator".to_string());
-	
+
 	// HEY AI DONOT: because its not needed, I dont use gnome!!!
 	// // Determine flag for executing command in terminal
 	// let term_flag = if terminal.contains("gnome-terminal") {
@@ -181,9 +182,9 @@ fn prepend_editor_options_and_clipboard(mut apps: Vec<(String, String, String)>)
 			// Option 2: echo pipe edit
 			// Command: $TERMINAL -e sh -c 'printf "%s\n" "$1" | <editor>' -- %f
 			let pipe_cmd = format!(
-				"{} {} sh -c 'printf \"%s\" \"$1\" | {}' -- %f", 
-				shell_escape(&terminal), 
-				term_flag, 
+				"{} {} sh -c 'printf \"%s\" \"$1\" | {}' -- %f",
+				shell_escape(&terminal),
+				term_flag,
 				shell_escape(&editor),
 			);
 			apps.insert(1, ("$ echo $@ | $EDITOR".to_string(), pipe_cmd, "custom".to_string()));
@@ -202,8 +203,8 @@ fn prepend_editor_options_and_clipboard(mut apps: Vec<(String, String, String)>)
 				// Option 2: echo pipe edit
 				// Command: $TERMINAL -e sh -c 'printf "%s" "$1" | $ "$EDITOR"' -- %f
 				let pipe_cmd = format!(
-					"{} {} sh -c 'printf \"%s\" \"$1\" | $ \"\\$EDITOR\"' -- %f", 
-					shell_escape(&terminal), 
+					"{} {} sh -c 'printf \"%s\" \"$1\" | $ \"\\$EDITOR\"' -- %f",
+					shell_escape(&terminal),
 					term_flag,
 				);
 				apps.insert(1, ("$ echo $@ | $EDITOR".to_string(), pipe_cmd, "custom".to_string()));
@@ -256,13 +257,15 @@ fn show_selection_dialog(apps: &[(String, String, String)], target: &str) -> (St
 		kdialog_args.push(app.0.clone());
 	}
 
-	let output = Command::new("kdialog")
+	let output =
+		Command::new("kdialog")
 		.args(&kdialog_args)
 		.output()
 		.unwrap_or_else(|e| {
 			eprintln!("Failed to run kdialog: {}", e);
 			std::process::exit(127);
-		});
+		})
+	;
 
 	if !output.status.success() {
 		eprintln!("Selection cancelled or failed.");
@@ -356,33 +359,38 @@ fn parse_desktop_file(path: &Path, target_mime: &str) -> Option<(String, String,
 fn launch_app(exec_template: &str, target: &str) {
 	// Escape target for use inside double quotes in shell
 	let target_quoted = double_quote_escape(target);
-	
+
 	let mut command_line = exec_template.to_string();
-	
+
 	command_line = command_line.replace("%f", &target_quoted);
 	command_line = command_line.replace("%F", &target_quoted);
 	command_line = command_line.replace("%u", &target_quoted);
 	command_line = command_line.replace("%U", &target_quoted);
-	
-	if !exec_template.contains("%f") && !exec_template.contains("%F") && 
-	   !exec_template.contains("%u") && !exec_template.contains("%U") {
+
+	if
+		!exec_template.contains("%f")
+		&&
+		!exec_template.contains("%F")
+		&&
+		!exec_template.contains("%u")
+		&&
+		!exec_template.contains("%U")
+	{
 		command_line.push_str(" ");
 		command_line.push_str(&target_quoted);
 	}
 
 	println!("Executing: {}", command_line);
-	
-	let status = Command::new("sh")
+
+	let status =
+		Command::new("sh")
 		.arg("-c")
 		.arg(command_line)
-		.status();
-		
+		.status()
+	;
+
 	match status {
-		Ok(s) => {
-			if !s.success() {
-				eprintln!("Application exited with error.");
-			}
-		},
+		Ok(s) => { if !s.success() { eprintln!("Application exited with error."); } },
 		Err(e) => eprintln!("Failed to execute: {}", e),
 	}
 	return;
@@ -433,9 +441,12 @@ fn shell_escape(s: &str) -> String {
 
 /// Escape string for use inside double quotes in shell
 fn double_quote_escape(s: &str) -> String {
-	let escaped = s.replace('\\', "\\\\")
+	let escaped =
+		s
+		.replace('\\', "\\\\")
 		.replace('"', "\\\"")
 		.replace('$', "\\$")
-		.replace('`', "\\`");
+		.replace('`', "\\`")
+	;
 	format!("\"{}\"", escaped)
 }

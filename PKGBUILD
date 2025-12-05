@@ -15,9 +15,10 @@ md5sums=()
 build() {
 	cd "$srcdir"
 	
-	# Remove the shebang 'rust-script' line and compile with rustc
-	tail -n +2 "$startdir"/openwith.rs > openwith.rs
-	rustc -O openwith.rs -o openwith
+	# # Remove the shebang 'rust-script' line and compile with rustc
+	# tail -n +2 "$startdir"/openwith.rs > openwith.rs
+	# rustc -O openwith.rs -o openwith
+	rustc -O "$startdir"/openwith.rs -o openwith
 	
 	# Process desktop files using the install script to srcdir
 	mkdir -p applications
