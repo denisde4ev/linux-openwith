@@ -141,7 +141,67 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 	apps.sort_by(|a, b| a.0.cmp(&b.0));
 	apps.dedup_by(|a, b| a.0 == b.0);
 
+	// Prepend Editor options
+	if let Ok(editor) = env::var("EDITOR") {
+		if !editor.is_empty() {
+			// Determine terminal emulator
+			let terminal = env::var("TERMINAL").unwrap_or_else(|_| "x-terminal-emulator".to_string());
+			
+			// note gnome-terminal uses `--` and not `-e`, but I dont use it!
+			// or make your own wrapper
+			// DONT: let term_flag = "--";
+			let term_flag = "-e";
+
+			// Option 1: EDITOR=<editor>
+			// Command: $TERMINAL -e $EDITOR -- %f
+			// We use shell_escape for paths to handle spaces/quotes
+			let editor_cmd = format!("{} {} {} -- %f", shell_escape(&terminal), term_flag, shell_escape(&editor));
+			apps.insert(0, (format!("$ EDITOR={}", editor), editor_cmd, "custom".to_string()));
+
+			// Option 2: echo pipe edit
+			// Command: $TERMINAL -e sh -c 'printf "%s\n" "$1" | $EDITOR' -- %f
+			// We pass %f as an argument to sh -c to avoid quoting hell.
+			// The command string inside sh -c needs $EDITOR to be properly escaped/quoted.
+			let pipe_cmd = format!(
+				"{} {} sh -c 'printf \"%s\\n\" \"$1\" | {}' -- %f", 
+				shell_escape(&terminal), 
+				term_flag, 
+				shell_escape(&editor)
+			);
+			apps.insert(1, ("$ echo $@ | $EDITOR".to_string(), pipe_cmd, "custom".to_string()));
+		}
+	}
+
+	// Clipboard option
+	let clipboard_cmd = if env::var("WAYLAND_DISPLAY").is_ok() && check_command_exists("wl-copy") {
+		Some("wl-copy -n")
+	} else if env::var("DISPLAY").is_ok() && check_command_exists("xclip") {
+		Some("xclip -sel clip -r")
+	} else if check_command_exists("termux-clipboard-set") {
+		Some("termux-clipboard-set")
+	} else {
+		None
+	};
+
+	if let Some(cmd) = clipboard_cmd {
+		// Command: sh -c 'printf "%s" "$1" | <clipboard_cmd>' -- %f
+		// We use printf "%s" (no newline) as usually desired for clipboard
+		let full_cmd = format!("sh -c 'printf \"%s\" \"$1\" | {}' -- %f", cmd);
+		apps.insert(0, (format!("$ {}", cmd), full_cmd, "custom".to_string()));
+	}
+
 	apps
+}
+
+fn check_command_exists(cmd: &str) -> bool {
+	return
+		Command::new("sh")
+		.arg("-c")
+		.arg(format!("command -v {}", cmd))
+		.output()
+		.map(|o| o.status.success())
+		.unwrap_or(false)
+	;
 }
 
 /// Show kdialog selection menu and return the selected application
@@ -254,7 +314,8 @@ fn parse_desktop_file(path: &Path, target_mime: &str) -> Option<(String, String,
 }
 
 fn launch_app(exec_template: &str, target: &str) {
-	let target_quoted = format!("\"{}\"", target); // Basic quoting
+	// Escape target for use inside double quotes in shell
+	let target_quoted = double_quote_escape(target);
 	
 	let mut command_line = exec_template.to_string();
 	
@@ -281,7 +342,7 @@ fn launch_app(exec_template: &str, target: &str) {
 			if !s.success() {
 				eprintln!("Application exited with error.");
 			}
-		}
+		},
 		Err(e) => eprintln!("Failed to execute: {}", e),
 	}
 }
@@ -322,4 +383,18 @@ fn find_desktop_file(name: &str, dirs: &[Option<std::path::PathBuf>]) -> Option<
 		}
 	}
 	None
+}
+
+/// Escape string for use in shell (single quotes)
+fn shell_escape(s: &str) -> String {
+	format!("'{}'", s.replace("'", "'\\''"))
+}
+
+/// Escape string for use inside double quotes in shell
+fn double_quote_escape(s: &str) -> String {
+	let escaped = s.replace('\\', "\\\\")
+		.replace('"', "\\\"")
+		.replace('$', "\\$")
+		.replace('`', "\\`");
+	format!("\"{}\"", escaped)
 }
