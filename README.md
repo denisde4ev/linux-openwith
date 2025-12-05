@@ -66,20 +66,15 @@ The project includes `.desktop` files for common protocols and MIME types:
 2. Update the `Exec` paths in all `.desktop` files to point to the absolute path of `openwith.rs`:
    ```bash
    # Replace /path/to/ with the actual path
-   sed -i 's|/path/to/openwith.rs|/full/path/to/openwith.rs|g' openwith-*.desktop
+   ./install-desktop-file.sh -e /full/path/to/openwith.rs desktop-files/openwith-*.desktop ~/.local/share/applications/
    ```
 
-3. Copy the `.desktop` files to your local applications directory:
-   ```bash
-   cp openwith-*.desktop ~/.local/share/applications/
-   ```
-
-4. Update the desktop database:
+3. Update the desktop database:
    ```bash
    update-desktop-database ~/.local/share/applications/
    ```
 
-5. Set the openwith as the default handler for specific types (optional):
+4. Set the openwith as the default handler for specific types (optional):
    ```bash
    xdg-mime default openwith-http.desktop x-scheme-handler/http
    xdg-mime default openwith-https.desktop x-scheme-handler/https

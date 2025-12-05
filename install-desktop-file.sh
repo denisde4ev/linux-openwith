@@ -14,8 +14,8 @@ case $1 in --help)
 		"Options:" \
 		"  -e EXEC_PATH    Path to the executable (default: auto-detect openwith.rs)" \
 		"" \
-		"Example: $0 openwith-*.desktop ~/.local/share/applications/" \
-		"Example: $0 -e /usr/bin/openwith openwith-*.desktop /usr/share/applications/" \
+		"Example: $0 desktop-files/openwith-*.desktop ~/.local/share/applications/" \
+		"Example: $0 -e /usr/bin/openwith desktop-files/openwith-*.desktop /usr/share/applications/" \
 	;
 	exit
 esac

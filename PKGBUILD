@@ -29,7 +29,7 @@ build() {
 	"$startdir"/install-desktop-file.sh \
 		-e /usr/bin/openwith \
 		-- \
-		"$startdir"/openwith-*.desktop \
+		"$startdir"/desktop-files/openwith-*.desktop \
 		applications/ \
 	;
 }
@@ -49,4 +49,3 @@ package() {
 		install -Dm644 "$startdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
 	fi
 }
-

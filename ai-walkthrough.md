@@ -67,19 +67,19 @@ Replaced with `rm OpenWith-wrapper.sh` command as requested by the user.
 
 2. **Update paths in desktop files:**
    ```bash
-   sed -i 's|/path/to/index.rs|/full/path/to/index.rs|g' OpenWith-*.desktop
+   sed -i 's|/path/to/index.rs|/full/path/to/index.rs|g' desktop-files/openwith-*.desktop
    ```
 
 3. **Install desktop files:**
    ```bash
-   cp OpenWith-*.desktop ~/.local/share/applications/
+   cp desktop-files/openwith-*.desktop ~/.local/share/applications/
    update-desktop-database ~/.local/share/applications/
    ```
 
 4. **Set as default (optional):**
    ```bash
-   xdg-mime default OpenWith-http.desktop x-scheme-handler/http
-   xdg-mime default OpenWith-https.desktop x-scheme-handler/https
+   xdg-mime default openwith-http.desktop x-scheme-handler/http
+   xdg-mime default openwith-https.desktop x-scheme-handler/https
    ```
 
 ## Usage Examples
