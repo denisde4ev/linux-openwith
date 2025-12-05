@@ -98,12 +98,37 @@ fn find_applications(type_arg: &str) -> Vec<(String, String, String)> {
 		dirs.insert(0, Some(std::path::PathBuf::from(home).join(".local/share/applications")));
 	}
 
-	// Scan directories for matching applications
 	let mut apps: Vec<(String, String, String)> = Vec::new();
+	let mut found_in_cache = false;
 
-	for dir in dirs.into_iter().flatten() {
-		if dir.exists() {
-			visit_dirs(&dir, &mime_type, &mut apps);
+	// Try to find in mimeinfo.cache first
+	for dir in dirs.iter().flatten() {
+		let cache_path = dir.join("mimeinfo.cache");
+		if cache_path.exists() {
+			let cached_files = parse_mimeinfo_cache(&cache_path, &mime_type);
+			for desktop_name in cached_files {
+				found_in_cache = true;
+				// Try to find the desktop file in any of the search directories
+				if let Some(path) = find_desktop_file(&desktop_name, &dirs) {
+					if let Some(app) = parse_desktop_file(&path, &mime_type) {
+						apps.push(app);
+					}
+				}
+			}
+		}
+	}
+
+	// If nothing found in cache, scan directories
+	if !found_in_cache || apps.is_empty() {
+		// Only print fallback message if we actually tried cache and failed to get results
+		if found_in_cache {
+			println!("Cache entries found but failed to load applications, falling back to full scan...");
+		}
+		
+		for dir in dirs.into_iter().flatten() {
+			if dir.exists() {
+				visit_dirs(&dir, &mime_type, &mut apps);
+			}
 		}
 	}
 
@@ -259,4 +284,42 @@ fn launch_app(exec_template: &str, target: &str) {
 		}
 		Err(e) => eprintln!("Failed to execute: {}", e),
 	}
+}
+
+fn parse_mimeinfo_cache(path: &Path, target_mime: &str) -> Vec<String> {
+	let file = match fs::File::open(path) {
+		Ok(f) => f,
+		Err(_) => return Vec::new(),
+	};
+	let reader = io::BufReader::new(file);
+	let mut desktop_files = Vec::new();
+
+	for line in reader.lines().flatten() {
+		let line = line.trim();
+		// Format is mime/type=file1.desktop;file2.desktop;
+		if line.starts_with(target_mime) {
+			if let Some(rest) = line.strip_prefix(target_mime) {
+				if rest.starts_with('=') {
+					let files_part = &rest[1..];
+					for f in files_part.split(';') {
+						let f = f.trim();
+						if !f.is_empty() {
+							desktop_files.push(f.to_string());
+						}
+					}
+				}
+			}
+		}
+	}
+	desktop_files
+}
+
+fn find_desktop_file(name: &str, dirs: &[Option<std::path::PathBuf>]) -> Option<std::path::PathBuf> {
+	for dir in dirs.iter().flatten() {
+		let path = dir.join(name);
+		if path.exists() {
+			return Some(path);
+		}
+	}
+	None
 }

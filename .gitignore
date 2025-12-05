@@ -9,3 +9,7 @@ src/
 # Backup files
 *~
 *.bak
+
+
+system-applications/
+openwith
